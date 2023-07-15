@@ -41,7 +41,6 @@ def main():
         count += 1
         print(f"-PROCESSING {count}/{epubs_total}: {epub.name}")
         
-
         # Recreate directory tree of epub relative to its current working directory
         new_epub = dest.joinpath(epub.relative_to(src))
         new_epub.parent.mkdir(parents=True, exist_ok=True)
