@@ -3,7 +3,6 @@
 import argparse
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
-from typing import Union
 
 
 def get_args():
@@ -13,10 +12,6 @@ def get_args():
     parser.add_argument("output_dir", type=str)
 
     return parser.parse_args()
-
-
-def remove_rb(text: str) -> str:
-    return text.replace("<rb>", "").replace("</rb>", "")
 
 
 def validate_dir(path: Path) -> None:
@@ -50,12 +45,10 @@ def main():
         with ZipFile(epub, "r") as zip, ZipFile(new_epub, "w", ZIP_DEFLATED) as new_zip:
             for file_path in zip.namelist():
                 with zip.open(file_path, "r") as file:
-                    text: Union[str, bytes]
+                    text = file.read()
 
                     if "html" in file_path[-4:]:
-                        text = remove_rb(file.read().decode("utf-8"))
-                    else:
-                        text = file.read()
+                        text = text.replace(b"<rb>", b"").replace(b"</rb>", b"")
 
                     new_zip.writestr(file_path, text) 
     
