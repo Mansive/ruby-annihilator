@@ -1,6 +1,7 @@
 """Fixes Yomichan sentence extraction on epubs by removing <rb> tags"""
 
 import argparse
+import re
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
@@ -24,18 +25,22 @@ def main():
 
     src = Path(args.input_dir)
     validate_dir(src)
+    print(f"Source: {src}")
 
     dest = Path(args.output_dir)
     validate_dir(dest)
+    print(f"Destination: {dest}")
 
-    print("-Running; let it cook...")
+    print("\n-Running; let it cook...")
 
     epubs = [entry for entry in src.rglob("*") if entry.suffix == ".epub"]
+    epubs_total = len(epubs)
     count = 0
 
     for epub in epubs:
-        print(f"-PROCESSING: {epub.name}")
         count += 1
+        print(f"-PROCESSING {count}/{epubs_total}: {epub.name}")
+        
 
         # Recreate directory tree of epub relative to its current working directory
         new_epub = dest.joinpath(epub.relative_to(src))
@@ -48,7 +53,7 @@ def main():
                     text = file.read()
 
                     if "html" in file_path[-4:]:
-                        text = text.replace(b"<rb>", b"").replace(b"</rb>", b"")
+                        text = re.sub(b"</?rb>", b"", text)
 
                     new_zip.writestr(file_path, text) 
     
