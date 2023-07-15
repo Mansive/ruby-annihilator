@@ -3,6 +3,7 @@
 import argparse
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
+from typing import Union
 
 
 def get_args():
@@ -49,7 +50,7 @@ def main():
         with ZipFile(epub, "r") as zip, ZipFile(new_epub, "w", ZIP_DEFLATED) as new_zip:
             for file_path in zip.namelist():
                 with zip.open(file_path, "r") as file:
-                    text: str | bytes
+                    text: Union[str, bytes]
 
                     if "html" in file_path[-4:]:
                         text = remove_rb(file.read().decode("utf-8"))
