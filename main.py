@@ -45,12 +45,13 @@ def main():
         new_epub = dest.joinpath(epub.relative_to(src))
         new_epub.parent.mkdir(parents=True, exist_ok=True)
 
+        # DEFLATE used for compatibility with ttu and Calibre
         with ZipFile(epub, "r") as zip, ZipFile(new_epub, "w", ZIP_DEFLATED) as new_zip:
             for file_path in zip.namelist():
                 with zip.open(file_path, "r") as file:
                     text: str | bytes
 
-                    if ".xhtml" in file_path:
+                    if "html" in file_path[-4:]:
                         text = remove_rb(file.read().decode("utf-8"))
                     else:
                         text = file.read()
