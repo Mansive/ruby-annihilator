@@ -1,3 +1,5 @@
+"""Doesn't work on Python 3.11 cause reasons"""
+import argparse
 import json
 from mega import Mega
 from pathlib import Path
@@ -28,14 +30,45 @@ def get_config() -> Config:
     return config
 
 
+def get_args():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("input_dir", type=dir_path)
+
+    return parser.parse_args()
+
+
+def dir_path(path):
+    path = Path(path)
+    if path.is_dir():
+        return path
+    else:
+        raise argparse.ArgumentTypeError(f"'{path}' is not a valid directory path")
+
+
 def main():
     config = get_config()
+    args = get_args()
+
+    series_src = Path(args.input_dir)
+
+    print(f"Source: {series_src}\n")
+    print("-Logging into Mega...")
 
     mega = Mega()
     m = mega.login(config["email"], config["password"])
 
-    details = m.get_user()
-    print(details)
+    print("-Login successful! Starting upload process...")
+
+    series = [entry for entry in series_src.iterdir() if entry.name != "desktop.ini"]
+
+    for entry in series:
+        file = m.upload(entry)
+        link = m.get_upload_link(file)
+
+        # TODO: Create text file of links
+        print(link)
+
 
 if __name__ == "__main__":
     main()
