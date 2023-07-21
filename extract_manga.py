@@ -1,9 +1,9 @@
 import argparse
+import shlex
 import subprocess
 import sys
-import shlex
 from pathlib import Path
-from zipfile import ZIP_LZMA, ZipFile
+from zipfile import ZipFile
 
 
 def get_args():
