@@ -1,3 +1,7 @@
 run.bat
 config.json
 uploaded_books.txt
+run_zip_series.bat
+run_upload.bat
+run_rb_annihilate.bat
+run_extract_manga.bat
