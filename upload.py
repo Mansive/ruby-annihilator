@@ -91,7 +91,9 @@ def main():
         else:
             print("\n[Kuru Kuru Kuru Kuru] what the fuck\n")
     
-    with open("uploaded_books.txt", "w", encoding="utf8") as file:
+    text_path = series_src / "uploaded_books.txt"
+    
+    with open(text_path, "w", encoding="utf8") as file:
         for name, link in uploads.items():
             file.write(f"{name}\n{link}\n\n")
 

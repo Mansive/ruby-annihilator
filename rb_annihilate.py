@@ -27,8 +27,8 @@ def main():
     src = Path(args.input_dir)
     dest = Path(args.output_dir)
 
-    print(f"Source: {src}")
-    print(f"Destination: {dest}\n")
+    print(f"-Source: {src}")
+    print(f"-Destination: {dest}\n")
 
     epubs = [entry for entry in src.rglob("*") if entry.suffix == ".epub"]
     epubs_total = len(epubs)
