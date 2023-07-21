@@ -36,8 +36,8 @@ def main():
     series_src = Path(args.input_dir)
     dest = Path(args.output_dir)
 
-    print(f"Source: {series_src}")
-    print(f"Destination: {dest}")
+    print(f"-Source: {series_src}")
+    print(f"-Destination: {dest}")
 
     series = [entry for entry in series_src.iterdir() if entry.name != "desktop.ini"]
 
