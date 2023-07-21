@@ -27,6 +27,12 @@ def run_cmd(cmd):
     subprocess.run(cmd if sys.platform == "win32" else shlex.split(cmd))
 
 
+def is_image(path):
+    if not isinstance(path, Path):
+        path = Path(path)
+    return path.suffix.lower() in ['.jpg', '.jpeg', '.png', '.avif', '.webp']
+
+
 def main():
     args = get_args()
 
@@ -48,7 +54,8 @@ def main():
 
         with ZipFile(entry, "r") as epub:
             for path in epub.infolist():
-                if "OEBPS/image/" in path.filename:
+                # path.filename actually includes the path of the file
+                if is_image(path.filename) and "image" in path.filename.lower():
                    # Extract to "/" instead of "OEBPS/image/"
                    path.filename = Path(path.filename).name
                    epub.extract(path, manga_path)
